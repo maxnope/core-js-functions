@@ -17,6 +17,7 @@
  *   getCurrentFunctionName() => 'getCurrentFunctionName'
  *
  */
+
 function getCurrentFunctionName() {
   throw new Error('Not implemented');
 }
