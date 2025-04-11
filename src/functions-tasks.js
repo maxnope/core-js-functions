@@ -163,8 +163,16 @@ function retry(/* func, attempts */) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  return (...args) => {
+    const argsString = args.map((arg) => JSON.stringify(arg)).join(',');
+
+    logFunc(`${func.name}(${argsString}) starts`);
+    const result = func.apply(this, args);
+    logFunc(`${func.name}(${argsString}) ends`);
+
+    return result;
+  };
 }
 
 /**
@@ -174,14 +182,16 @@ function logger(/* func, logFunc */) {
  * @return {Function}
  *
  * @example
- *   const fn = function(x1,x2,x3,x4) { return  x1 + x2 + x3 + x4; };
+ *   const fn = funcion(x1,x2,x3,x4) { returtn  x1 + x2 + x3 + x4; };
  *   partialUsingArguments(fn, 'a')('b','c','d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b')('c','d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn, ...args1) {
+  return function concatArgs(...remainingArgs) {
+    return fn(...args1, ...remainingArgs);
+  };
 }
 
 /**
@@ -201,8 +211,13 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let current = startFrom;
+  return () => {
+    const result = current;
+    current += 1;
+    return result;
+  };
 }
 
 module.exports = {
